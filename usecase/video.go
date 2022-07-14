@@ -15,8 +15,8 @@ func NewVideoUseCase(repository *repository.Video) *Video {
 	return &Video{repo: repository}
 }
 
-func (s *Video) ListarTodos() ([]*domain.Video, error) {
-	listaVideos, err := s.repo.ListarTodos()
+func (v *Video) ListarTodos() ([]*domain.Video, error) {
+	listaVideos, err := v.repo.ListarTodos()
 
 	if err != nil {
 		return nil, err
@@ -32,4 +32,29 @@ func (s *Video) ListarTodos() ([]*domain.Video, error) {
 	}
 
 	return videos, nil
+}
+
+func (v *Video) BuscarPorId(id int) (*domain.Video, error) {
+	video, err := v.repo.BuscarPorId(id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if video.Id == 0 {
+		return nil, entity.ErrNotFound
+	}
+
+	return mapper.ToDomain(video), nil
+}
+
+func (v *Video) Criar(videoDomain *domain.Video) (*domain.Video, error) {
+	videoEntity := mapper.ToEntity(videoDomain)
+	videoGravado, err := v.repo.Criar(videoEntity)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return mapper.ToDomain(videoGravado), nil
 }

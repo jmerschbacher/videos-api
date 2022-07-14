@@ -2,5 +2,5 @@ package entity
 
 import "errors"
 
-//ErrNotFound not found
-var ErrNotFound = errors.New("Not found")
+var ErrNotFound = errors.New("Vídeo não encontrado")
+var ErrParametroInvalido = errors.New("Parâmetro(s) inválido(s)")
