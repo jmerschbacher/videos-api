@@ -58,3 +58,11 @@ func (v *Video) Criar(videoDomain *domain.Video) (*domain.Video, error) {
 
 	return mapper.ToDomain(videoGravado), nil
 }
+
+func (v *Video) Excluir(id int) error {
+	err := v.repo.Excluir(id)
+	if err != nil {
+		return err
+	}
+	return nil
+}

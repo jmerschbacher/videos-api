@@ -47,3 +47,19 @@ func (v *Video) Criar(video *entity.Video) (*entity.Video, error) {
 
 	return video, nil
 }
+
+func (v *Video) Excluir(id int) error {
+	var video entity.Video
+	v.db.First(&video, id)
+
+	if video.Id == 0 {
+		return entity.ErrVideoInexistente
+	}
+
+	v.db.Delete(&video, id)
+	if v.db.Error != nil {
+		return v.db.Error
+	}
+
+	return nil
+}

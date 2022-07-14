@@ -24,6 +24,7 @@ func (v *Video) ListarTodos(c *gin.Context) {
 		if errors.Is(err, entity.ErrNotFound) {
 			c.JSON(http.StatusNotFound, domain.Data{
 				Data: domain.Error{
+					Method:   http.MethodGet,
 					Rota:     c.FullPath(),
 					Codigo:   http.StatusNotFound,
 					Mensagem: err.Error(),
@@ -33,6 +34,7 @@ func (v *Video) ListarTodos(c *gin.Context) {
 		}
 		c.JSON(http.StatusInternalServerError, domain.Data{
 			Data: domain.Error{
+				Method:   http.MethodGet,
 				Rota:     c.FullPath(),
 				Codigo:   http.StatusInternalServerError,
 				Mensagem: err.Error(),
@@ -49,6 +51,7 @@ func (v *Video) BuscarPorId(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusBadRequest, domain.Data{
 			Data: domain.Error{
+				Method:   http.MethodGet,
 				Rota:     c.FullPath(),
 				Codigo:   http.StatusBadRequest,
 				Mensagem: entity.ErrParametroInvalido.Error(),
@@ -64,6 +67,7 @@ func (v *Video) BuscarPorId(c *gin.Context) {
 		if errors.Is(err, entity.ErrNotFound) {
 			c.JSON(http.StatusNotFound, domain.Data{
 				Data: domain.Error{
+					Method:   http.MethodGet,
 					Rota:     c.FullPath(),
 					Codigo:   http.StatusNotFound,
 					Mensagem: err.Error(),
@@ -74,6 +78,7 @@ func (v *Video) BuscarPorId(c *gin.Context) {
 
 		c.JSON(http.StatusInternalServerError, domain.Data{
 			Data: domain.Error{
+				Method:   http.MethodGet,
 				Rota:     c.FullPath(),
 				Codigo:   http.StatusInternalServerError,
 				Mensagem: err.Error(),
@@ -91,6 +96,7 @@ func (v *Video) Criar(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusBadRequest, domain.Data{
 			Data: domain.Error{
+				Method:   http.MethodPost,
 				Rota:     c.FullPath(),
 				Codigo:   http.StatusBadRequest,
 				Mensagem: err.Error(),
@@ -102,6 +108,7 @@ func (v *Video) Criar(c *gin.Context) {
 	if !video.IsValido() {
 		c.JSON(http.StatusBadRequest, domain.Data{
 			Data: domain.Error{
+				Method:   http.MethodPost,
 				Rota:     c.FullPath(),
 				Codigo:   http.StatusBadRequest,
 				Mensagem: entity.ErrParametroInvalido.Error(),
@@ -114,6 +121,7 @@ func (v *Video) Criar(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusBadRequest, domain.Data{
 			Data: domain.Error{
+				Method:   http.MethodPost,
 				Rota:     c.FullPath(),
 				Codigo:   http.StatusBadRequest,
 				Mensagem: err.Error(),
@@ -123,4 +131,35 @@ func (v *Video) Criar(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, domain.Data{Data: &video})
+}
+
+func (v *Video) Excluir(c *gin.Context) {
+	id := c.Param("id")
+	intId, err := strconv.Atoi(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, domain.Data{
+			Data: domain.Error{
+				Method:   http.MethodDelete,
+				Rota:     c.FullPath(),
+				Codigo:   http.StatusBadRequest,
+				Mensagem: entity.ErrParametroInvalido.Error(),
+			},
+		})
+		return
+	}
+
+	err = v.useCase.Excluir(intId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, domain.Data{
+			Data: domain.Error{
+				Method:   http.MethodDelete,
+				Rota:     c.FullPath(),
+				Codigo:   http.StatusBadRequest,
+				Mensagem: err.Error(),
+			},
+		})
+		return
+	}
+
+	c.JSON(http.StatusNoContent, nil)
 }
