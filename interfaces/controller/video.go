@@ -163,3 +163,77 @@ func (v *Video) Excluir(c *gin.Context) {
 
 	c.JSON(http.StatusNoContent, nil)
 }
+
+func (v *Video) Editar(c *gin.Context) {
+	id := c.Param("id")
+	intId, err := strconv.Atoi(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, domain.Data{
+			Data: domain.Error{
+				Method:   http.MethodPatch,
+				Rota:     c.FullPath(),
+				Codigo:   http.StatusBadRequest,
+				Mensagem: entity.ErrParametroInvalido.Error(),
+			},
+		})
+		return
+	}
+
+	var video *domain.Video
+	err = c.ShouldBindJSON(&video)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, domain.Data{
+			Data: domain.Error{
+				Method:   http.MethodPatch,
+				Rota:     c.FullPath(),
+				Codigo:   http.StatusBadRequest,
+				Mensagem: err.Error(),
+			},
+		})
+		return
+	}
+
+	if video.Id == 0 {
+		video.Id = intId
+	}
+
+	if video.Id != intId {
+		c.JSON(http.StatusBadRequest, domain.Data{
+			Data: domain.Error{
+				Method:   http.MethodPatch,
+				Rota:     c.FullPath(),
+				Codigo:   http.StatusBadRequest,
+				Mensagem: entity.ErrIdPathEBodyDiferentes.Error(),
+			},
+		})
+		return
+	}
+
+	if !video.IsValidoEdicao() {
+		c.JSON(http.StatusBadRequest, domain.Data{
+			Data: domain.Error{
+				Method:   http.MethodPatch,
+				Rota:     c.FullPath(),
+				Codigo:   http.StatusBadRequest,
+				Mensagem: entity.ErrParametroInvalido.Error(),
+			},
+		})
+		return
+	}
+
+	var videoAtualizado *domain.Video
+	videoAtualizado, err = v.useCase.EditarVideo(video)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, domain.Data{
+			Data: domain.Error{
+				Method:   http.MethodPatch,
+				Rota:     c.FullPath(),
+				Codigo:   http.StatusBadRequest,
+				Mensagem: err.Error(),
+			},
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, domain.Data{Data: videoAtualizado})
+}

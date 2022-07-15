@@ -63,3 +63,19 @@ func (v *Video) Excluir(id int) error {
 
 	return nil
 }
+
+func (v *Video) Atualizar(video *entity.Video) (*entity.Video, error) {
+	var videoAtual entity.Video
+	v.db.First(&videoAtual, video.Id)
+
+	if videoAtual.Id == 0 {
+		return nil, entity.ErrVideoInexistente
+	}
+
+	v.db.Model(&videoAtual).UpdateColumns(video)
+	if v.db.Error != nil {
+		return nil, v.db.Error
+	}
+
+	return &videoAtual, nil
+}

@@ -12,6 +12,7 @@ func HandleRequests(video *controller.Video) {
 	r.GET("/videos/:id", video.BuscarPorId)
 	r.POST("/videos", video.Criar)
 	r.DELETE("/videos/:id", video.Excluir)
+	r.PATCH("/videos/:id", video.Editar)
 	err := r.Run()
 	if err != nil {
 		log.Panic("Erro ao disponibilizar rotas")

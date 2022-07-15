@@ -66,3 +66,12 @@ func (v *Video) Excluir(id int) error {
 	}
 	return nil
 }
+
+func (v *Video) EditarVideo(video *domain.Video) (*domain.Video, error) {
+	videoEntity := mapper.ToEntity(video)
+	entityAtualizada, err := v.repo.Atualizar(videoEntity)
+	if err != nil {
+		return nil, err
+	}
+	return mapper.ToDomain(entityAtualizada), nil
+}
