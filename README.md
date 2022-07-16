@@ -1,5 +1,12 @@
 # videos-api
-CRUD de vídeos destinado ao Alura Challenge #1.
+CRUD de vídeos destinado ao Alura Challenge #1 - Semana 1.
+
+## Rotas
+- GET /videos -> Listar todos os vídeos cadastrados -> status 200
+- GET /videos/{id} -> Listar vídeo por ID -> status 200
+- POST /videos (request body) -> Cadastrar vídeo -> status 201
+- PATCH /videos/{id} (request body) -> Atualizar um ou mais dados de vídeos -> status 200
+- DELETE /videos/{id} -> Excluir vídeo -> status 204
 
 ## Pendências
 - Ajustar configurações do MySQL no Docker -> `docker-compose.yml`
