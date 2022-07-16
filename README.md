@@ -2,6 +2,9 @@
 CRUD de vídeos destinado ao Alura Challenge #1 - Semana 1.
 
 ## Rotas
+
+Obs.: Collection do Postman na pasta raíz do projeto
+
 - GET /videos -> Listar todos os vídeos cadastrados -> status 200
 - GET /videos/{id} -> Listar vídeo por ID -> status 200
 - POST /videos (request body) -> Cadastrar vídeo -> status 201
