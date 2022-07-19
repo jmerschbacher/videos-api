@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	db := database.MySQLStarter()
+	db := database.PostgreSQLStarter()
 	videoRepository := repository.NewVideoRepository(db)
 	videoUsecase := usecase.NewVideoUseCase(videoRepository)
 	videoController := controller.NewVideoController(videoUsecase)

@@ -21,7 +21,7 @@ func NewVideoController(videoUseCase *usecase.Video) *Video {
 func (v *Video) ListarTodos(c *gin.Context) {
 	videos, err := v.useCase.ListarTodos()
 	if err != nil {
-		if errors.Is(err, entity.ErrNotFound) {
+		if errors.Is(err, entity.ErrVideoNotFound) {
 			c.JSON(http.StatusNotFound, domain.Data{
 				Data: domain.Error{
 					Method:   http.MethodGet,
@@ -64,7 +64,7 @@ func (v *Video) BuscarPorId(c *gin.Context) {
 	video, err = v.useCase.BuscarPorId(intId)
 
 	if err != nil {
-		if errors.Is(err, entity.ErrNotFound) {
+		if errors.Is(err, entity.ErrVideoNotFound) {
 			c.JSON(http.StatusNotFound, domain.Data{
 				Data: domain.Error{
 					Method:   http.MethodGet,
@@ -194,10 +194,10 @@ func (v *Video) Editar(c *gin.Context) {
 	}
 
 	if video.Id == 0 {
-		video.Id = intId
+		video.Id = uint(intId)
 	}
 
-	if video.Id != intId {
+	if video.Id != uint(intId) {
 		c.JSON(http.StatusBadRequest, domain.Data{
 			Data: domain.Error{
 				Method:   http.MethodPatch,

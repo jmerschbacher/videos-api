@@ -23,7 +23,7 @@ func (v *Video) ListarTodos() ([]*domain.Video, error) {
 	}
 
 	if len(listaVideos) == 0 {
-		return nil, entity.ErrNotFound
+		return nil, entity.ErrVideoNotFound
 	}
 
 	var videos []*domain.Video
@@ -42,7 +42,7 @@ func (v *Video) BuscarPorId(id int) (*domain.Video, error) {
 	}
 
 	if video.Id == 0 {
-		return nil, entity.ErrNotFound
+		return nil, entity.ErrVideoNotFound
 	}
 
 	return mapper.ToDomain(video), nil
