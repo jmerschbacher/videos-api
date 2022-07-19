@@ -1,4 +1,4 @@
-package mapper
+package video
 
 import (
 	"github.com/jmerschbacher/videos-api/domain"

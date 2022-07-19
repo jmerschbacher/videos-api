@@ -13,14 +13,28 @@ func NewCategoriaRepository(db *gorm.DB) *Categoria {
 	return &Categoria{db: db}
 }
 
-func (v *Categoria) ListarTodos() ([]*entity.Categoria, error) {
+func (c *Categoria) ListarTodos() ([]*entity.Categoria, error) {
 	var categoria []*entity.Categoria
-	v.db.Order("id").Find(&categoria)
-	err := v.db.Error
+	c.db.Order("id").Find(&categoria)
+	err := c.db.Error
 
 	if err != nil {
 		return nil, err
 	}
 
 	return categoria, nil
+}
+
+func (c *Categoria) Criar(categoria *entity.Categoria) error {
+	resultado := c.db.First(&categoria, &categoria.Id)
+	if resultado.RowsAffected != 0 {
+		return entity.ErrCategoriaJaExiste
+	}
+
+	err := c.db.Create(&categoria)
+	if err != nil {
+		return err.Error
+	}
+
+	return nil
 }

@@ -11,5 +11,6 @@ var ErrVideoInexistente = errors.New("Vídeo Inexistente")
 var ErrIdPathEBodyDiferentes = errors.New("ID informado no path é diferente do ID informado no request body")
 
 // Categoria
+var ErrCategoriaJaExiste = errors.New("Categoria já existe")
 var ErrCategoriaNotFound = errors.New("Categoria não encontrado")
 var ErrCategoriaInexistente = errors.New("Categoria Inexistente")
