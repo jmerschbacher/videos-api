@@ -7,4 +7,5 @@ import (
 
 func Endpoints(categoria *controller.Categoria, r *gin.Engine) {
 	r.POST("/categorias", categoria.Criar)
+	r.GET("/categorias", categoria.ListarTodas)
 }

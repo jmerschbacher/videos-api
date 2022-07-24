@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"github.com/jmerschbacher/videos-api/domain"
+	"github.com/jmerschbacher/videos-api/entity"
 	"github.com/jmerschbacher/videos-api/mapper/categoria"
 	"github.com/jmerschbacher/videos-api/repository"
 )
@@ -14,24 +15,25 @@ func NewCategoriaUseCase(repository *repository.Categoria) *Categoria {
 	return &Categoria{repo: repository}
 }
 
-//func (v *Categoria) ListarTodas() ([]*domain.Categoria, error) {
-//	listaCategorias, err := v.repo.ListarTodos()
-//
-//	if err != nil {
-//		return nil, err
-//	}
-//
-//	if len(listaCategorias) == 0 {
-//		return nil, entity.ErrCategoriaNotFound
-//	}
-//
-//	var categorias []*domain.Categoria
-//	for _, categoria := range listaCategorias {
-//		categorias = append(categorias, mapper.ToDomain(categoria))
-//	}
-//
-//	return videos, nil
-//}
+func (v *Categoria) ListarTodas() ([]domain.Categoria, error) {
+	var categoriasRetornadas []entity.Categoria
+	err := v.repo.ListarTodos(&categoriasRetornadas)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if len(categoriasRetornadas) == 0 {
+		return nil, entity.ErrCategoriaNotFound
+	}
+
+	var categoriasDomain []domain.Categoria
+	for _, categoriaEntity := range categoriasRetornadas {
+		categoriasDomain = append(categoriasDomain, categoria.ToDomain(categoriaEntity))
+	}
+
+	return categoriasDomain, nil
+}
 
 func (c *Categoria) Criar(categoriaDomain *domain.Categoria) error {
 	categoriaEntity := categoria.ToEntity(categoriaDomain)

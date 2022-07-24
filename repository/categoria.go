@@ -13,16 +13,15 @@ func NewCategoriaRepository(db *gorm.DB) *Categoria {
 	return &Categoria{db: db}
 }
 
-func (c *Categoria) ListarTodos() ([]*entity.Categoria, error) {
-	var categoria []*entity.Categoria
-	c.db.Order("id").Find(&categoria)
+func (c *Categoria) ListarTodos(categorias *[]entity.Categoria) error {
+	c.db.Order("id").Find(&categorias)
 	err := c.db.Error
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return categoria, nil
+	return nil
 }
 
 func (c *Categoria) Criar(categoria *entity.Categoria) error {
