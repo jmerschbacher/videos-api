@@ -15,7 +15,7 @@ func NewVideoRepository(db *gorm.DB) *Video {
 
 func (v *Video) ListarTodos() ([]*entity.Video, error) {
 	var videos []*entity.Video
-	v.db.Find(&videos)
+	v.db.Order("id").Find(&videos)
 	err := v.db.Error
 
 	if err != nil {

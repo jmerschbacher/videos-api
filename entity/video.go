@@ -1,8 +1,10 @@
 package entity
 
 type Video struct {
-	Id        int    `gorm:"primarykey;type:integer(7);AUTO_INCREMENT"`
-	Titulo    string `gorm:"type:varchar(100); not null"`
-	Descricao string `gorm:"type:text; not null"`
-	URL       string `gorm:"type:varchar(255); not null"`
+	Id          uint   `gorm:"primarykey;auto_increment"`
+	Titulo      string `gorm:"not null"`
+	Descricao   string `gorm:"not null"`
+	URL         string `gorm:"not null"`
+	CategoriaId uint
+	Categoria   Categoria `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }

@@ -3,7 +3,7 @@ package usecase
 import (
 	"github.com/jmerschbacher/videos-api/domain"
 	"github.com/jmerschbacher/videos-api/entity"
-	"github.com/jmerschbacher/videos-api/mapper"
+	"github.com/jmerschbacher/videos-api/mapper/video"
 	"github.com/jmerschbacher/videos-api/repository"
 )
 
@@ -23,40 +23,40 @@ func (v *Video) ListarTodos() ([]*domain.Video, error) {
 	}
 
 	if len(listaVideos) == 0 {
-		return nil, entity.ErrNotFound
+		return nil, entity.ErrVideoNotFound
 	}
 
 	var videos []*domain.Video
-	for _, video := range listaVideos {
-		videos = append(videos, mapper.ToDomain(video))
+	for _, videoEncontrado := range listaVideos {
+		videos = append(videos, video.ToDomain(videoEncontrado))
 	}
 
 	return videos, nil
 }
 
 func (v *Video) BuscarPorId(id int) (*domain.Video, error) {
-	video, err := v.repo.BuscarPorId(id)
+	videoEncontrado, err := v.repo.BuscarPorId(id)
 
 	if err != nil {
 		return nil, err
 	}
 
-	if video.Id == 0 {
-		return nil, entity.ErrNotFound
+	if videoEncontrado.Id == 0 {
+		return nil, entity.ErrVideoNotFound
 	}
 
-	return mapper.ToDomain(video), nil
+	return video.ToDomain(videoEncontrado), nil
 }
 
 func (v *Video) Criar(videoDomain *domain.Video) (*domain.Video, error) {
-	videoEntity := mapper.ToEntity(videoDomain)
+	videoEntity := video.ToEntity(videoDomain)
 	videoGravado, err := v.repo.Criar(videoEntity)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return mapper.ToDomain(videoGravado), nil
+	return video.ToDomain(videoGravado), nil
 }
 
 func (v *Video) Excluir(id int) error {
@@ -67,11 +67,11 @@ func (v *Video) Excluir(id int) error {
 	return nil
 }
 
-func (v *Video) EditarVideo(video *domain.Video) (*domain.Video, error) {
-	videoEntity := mapper.ToEntity(video)
+func (v *Video) EditarVideo(videoDomain *domain.Video) (*domain.Video, error) {
+	videoEntity := video.ToEntity(videoDomain)
 	entityAtualizada, err := v.repo.Atualizar(videoEntity)
 	if err != nil {
 		return nil, err
 	}
-	return mapper.ToDomain(entityAtualizada), nil
+	return video.ToDomain(entityAtualizada), nil
 }
